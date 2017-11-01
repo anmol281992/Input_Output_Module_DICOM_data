@@ -1,9 +1,11 @@
-# This  code Snippet generates the .exe file. You would need to install cx_freeze module to generate the executable.
+#This  code Snippet generates the .exe file. You would need to install cx_freeze module to generate the executable.
+#In order to generate the executable for Input_output_module run "python setup.py build" on the command prompt. Install cx_freeze module inorder to run setup.py
 
 import sys
 from cx_Freeze import setup, Executable
 import os
 # Dependencies are automatically detected, but it might need fine tuning.
+# Please enter all the dependencies below under label "packages"
 build_exe_options = {"packages": ["os", "numpy", "dicom", "sys", "tkinter"]}
 
 # GUI applications require a different base on Windows (the default is for a

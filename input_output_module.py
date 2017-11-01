@@ -4,7 +4,18 @@ import sys
 import numpy as np
 from tkinter import *
 from tkinter import filedialog
+
+# Inorder to run the module "pydicom" module is required.
+
 def import_dicom_folder(folder):
+    '''
+    Imports all the Dicom Images in a folder and arranges the images along the z-axis based on the INSTANCE NUMBER of the image.
+        Argument:
+             folder: The name of folder  containing a Dicom Images.
+        returns:
+             Image_list: A 3D numpy array which stores the  pixel data of dicom images arranged in the ascending order of its INSTANCE NUMBER .
+             dicom_data_list: When we import dicom images from "folder" they are stored in a dicom_data_list in its original format. The dicom data_list is arranged based on image's INSTANCE NUMBER .
+    '''
     try:
         file_list = [file for file in os.listdir(folder) if file.endswith('.dcm') and os.path.isfile(os.path.join(folder,file))]
     except FileNotFoundError:
@@ -34,6 +45,13 @@ def import_dicom_folder(folder):
             return Image_list.transpose(1, 2, 0), dicom_data_list
 
 def export_dicom_folder(folder_name, mask_matrix, dicom_data_list):
+    '''
+
+    :param folder_name: Defines the path of the folder in which we will store the masks of the Proximal Femur
+    :param mask_matrix: It is numpy array which stores the mask corresponding to each dicom image arranged based on the INSTANCE NUMBER of the Image
+    :param dicom_data_list: Same as defined in import_dicom_folder
+    :return:
+    '''
 
     for count, k in enumerate(dicom_data_list):
         name_file = folder_name.split('/')[-1] + '_' + str(k.SOPInstanceUID) + str(k.InstanceNumber) + 'mask.dcm'
@@ -45,6 +63,9 @@ def export_dicom_folder(folder_name, mask_matrix, dicom_data_list):
     return
 
 class GUI(Frame):
+    '''
+     Generates the GUI for import_export_module.
+    '''
 
     def __init__(self,master = None):
         Frame.__init__(self, master)
@@ -127,13 +148,6 @@ class GUI(Frame):
                 self.var.set("Export Unsucessfull")
         return
 
-
-
-
-
-def test():
-    print(sys.argv[1])
-    print(sys.argv[2])
 
 if __name__ == '__main__':
     root = Tk()
