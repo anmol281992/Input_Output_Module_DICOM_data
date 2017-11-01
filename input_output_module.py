@@ -85,14 +85,14 @@ class GUI(Frame):
 
     def info_box(self, master):
         self.var = StringVar()
-        self.text_box = Entry(master, textvariable=self.var)
+        self.text_box = Entry(master, textvariable=self.var, width = 25)
         self.text_box.pack(side= LEFT, ipady=3)
 
 
     def segmentation(self):
         try:
             self.var.set("Segmenting ......")
-            self.mask_matrix = self.image_list
+            self.mask_matrix = self.image_list  # Replace this line with tensorflow graph to generate the masks.
             self.var.set("Segmentation complete")
         except:
             self.var.set("Unable to segment")
@@ -131,9 +131,6 @@ class GUI(Frame):
             self.var.set("Empty image list")
         return
 
-
-
-
     def button_pressed_export_mask(self):
         if not self.image_list.any():
             self.var.set("Empty Image List")
@@ -142,8 +139,11 @@ class GUI(Frame):
             parent_path = os.path.split(self.folder)[0]
             self.folder_export = filedialog.askdirectory(initialdir= parent_path, title="Export Dicom Folder")
             try:
-                export_dicom_folder(self.folder_export, self.mask_matrix, self.dicom_data_list)
-                self.var.set("Export Successfull")
+                if self.folder_export == parent_path:
+                    self.var.set("Please select folder")
+                else:
+                    export_dicom_folder(self.folder_export, self.mask_matrix, self.dicom_data_list)
+                    self.var.set("Export Successfull")
             except:
                 self.var.set("Export Unsucessfull")
         return
